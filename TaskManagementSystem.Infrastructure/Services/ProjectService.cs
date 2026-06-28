@@ -51,7 +51,7 @@ public class ProjectService : IProjectService
     {
         var userId = _currentUserService.UserId;
 
-        return await _context.Projects
+        return await _context.Projects.AsNoTracking()
             .Where(x => x.UserId == userId)
             .Select(x => new ProjectResponse
             {
@@ -67,7 +67,7 @@ public class ProjectService : IProjectService
     {
         var userId = _currentUserService.UserId;
 
-        var project = await _context.Projects
+        var project = await _context.Projects.AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
 
         if (project == null)

@@ -64,13 +64,13 @@ public class TaskService : ITaskService
     {
         var userId = _currentUserService.UserId;
 
-        var project = await _context.Projects
+        var project = await _context.Projects.AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == projectId && x.UserId == userId);
 
         if (project == null)
             throw new NotFoundException("Project not found.");
 
-        return await _context.ProjectTasks
+        return await _context.ProjectTasks.AsNoTracking()
             .Where(x => x.ProjectId == projectId)
             .Select(x => new TaskResponse
             {
@@ -89,7 +89,7 @@ public class TaskService : ITaskService
     {
         var userId = _currentUserService.UserId;
 
-        var task = await _context.ProjectTasks
+        var task = await _context.ProjectTasks.AsNoTracking()
             .Include(x => x.Project)
             .FirstOrDefaultAsync(x =>
                 x.Id == id &&
